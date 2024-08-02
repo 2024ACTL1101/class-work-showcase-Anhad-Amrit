@@ -60,6 +60,12 @@ df <- merge(df, rf_df, by = "Date")
 First, objects for the start and end dates of analysis are created. Then specific column data is loaded into an object and then converted into a data frame for the dated region provided. Finally, the different data frames are merged into one data frame.
 #### Data Processing 
 ```{r data}
+
+colSums(is.na(df))
+# Fill N/A RF data
+df <- df %>%
+  fill(RF, .direction = "down") 
+```
 colSums(is.na(df))
 # Fill N/A RF data
 df <- df %>%
