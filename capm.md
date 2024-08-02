@@ -169,8 +169,63 @@ theme_rbook()
 ```
 
 
-**Answer:**
+### Step 3: Predictions Interval
+Suppose the current risk-free rate is 5.0%, and the annual expected return for the S&P 500 is 13.3%. Determine a 90% prediction interval for AMD's annual expected return.
 
-```r
-#fill the code
+*Hint: Calculate the daily standard error of the forecast ($s_f$), and assume that the annual standard error for prediction is $s_f \times \sqrt{252}$. Use the simple return average method to convert daily stock returns to annual returns if needed.*
+
+
+**Answer:**
+Using the rigorous equation of, 
+$$
+s_f = s_e \sqrt{1 + \frac{1}{n} + \frac{(X_f - \overline{X})^2}{\sum_{i=1}^{n}(X_i - \overline{X})^2}}
+$$
+we can calculate the 90% prediction interval. We also assume that the forcasted value is the mean of GSPC excess returns, leading to the right hand element multiplying with $s_e$ to be 1.
+```{r pi}
+# Calculate the daily standard error of the forecast (sf) using the given formula
+X_f <- mean(df$GSPC_Excess_Return)
+X_mean <- mean(df$GSPC_Excess_Return)
+n <- nrow(df)
+se <- summary(capm_model)$sigma
+numerator <- (X_f - X_mean)^2
+denominator <- sum((df$GSPC_Excess_Return - X_mean)^2)
+sf <- se * sqrt(1 + (1/n) + (numerator / denominator))
+
+# Convert the daily sf to annual sf
+annual_sf <- sf * sqrt(252)
+
+# Calculate the expected daily return for AMD based on the CAPM model
+current_rf_rate <- 5 / 100  # Convert annual risk-free rate to decimal
+expected_market_return <- 13.3 / 100  # Convert annual market return to decimal
+
+#Here we use the Beta value calculated in Step 2.
+expected_amd_return_annual <- current_rf_rate + 
+  1.5696231 * (expected_market_return - current_rf_rate) 
+
+
+# Calculate the 90% prediction interval for AMD's annual expected return
+alpha <- 0.10  # Significance level for a 90% prediction interval
+z_score <- qnorm(1 - alpha / 2)  # Z-score for a 90% prediction interval
+
+# Lower and upper bounds of the prediction interval
+lower_bound <- expected_amd_return_annual - z_score * annual_sf
+upper_bound <- expected_amd_return_annual + z_score * annual_sf
+
+
+cat("The 90% prediction interval for AMD's annual expected return is [", 
+    round(lower_bound * 100, 2), "%, ", round(upper_bound * 100, 2), "%]\n", sep="")
 ```
+Writing this prediction interval in the decimal notation from the data, we get an interval of [-0.4903, 0.8508]
+
+### Step 4: Results Interpretation
+We can now interpret the results we have acquired from our analysis and make a judgment on the trends found and the effectiveness of our model.
+
+Firstly, let's reprint the summary of our model and discuss its effectiveness.
+```{r summary}
+capm_model <- lm(AMD_Excess_Return ~ GSPC_Excess_Return, data = df)
+summary(capm_model)
+```
+Different elements of this summary give us an understanding of this model, including
+
+- The `Multiple R-squared` tells us that around 40% of the changes in AMD excess return can be attributed to the GSPC excess return predictor variable, implying that the relationship between our variables is very strong, and that our model is effective.
+- The `p` variable tells us a similar story. Since the `p` value is `<2e-16`, which is incredibly small and clearly less than 5%, we can see that the probability of our results occurring if there was no relationship between our predictor and response variables is almost impossible. This implies we can reject the null hypothesis, and that our model is effective due to their strong relationship. This relationship is further emphasized by the `***` next to the `p` variable, implying heavy significance.
