@@ -27,6 +27,7 @@ library(ggplot2)
 library(tidyverse)
 ```
 The code chunk above assures that the needed packages are applied in the library after they have been installed.
+
 ```{r load-data}
 #Set start and end dates
 start_date <- as.Date("2019-05-20")
