@@ -1,12 +1,5 @@
 
 # CAPM Analysis
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
-library(quantmod)
-library(ggplot2)
-library(tidyverse)
-```
 
 ## Introduction
 
