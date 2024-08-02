@@ -28,11 +28,11 @@ library(tidyverse)
 ```
 The code chunk above assures that the needed packages are applied in the library after they have been installed.
 ```{r load-data}
-# Set start and end dates
+#Set start and end dates
 start_date <- as.Date("2019-05-20")
 end_date <- as.Date("2024-05-20")
 
-# Load data for AMD, S&P 500, and the 1-month T-Bill (DTB4WK)
+#Load data for AMD, S&P 500, and the 1-month T-Bill (DTB4WK)
 amd_data <- getSymbols("AMD", src = "yahoo", from = start_date, 
                        to = end_date, auto.assign = FALSE)
 gspc_data <- getSymbols("^GSPC", src = "yahoo", from = start_date, to = 
@@ -40,11 +40,11 @@ gspc_data <- getSymbols("^GSPC", src = "yahoo", from = start_date, to =
 rf_data <- getSymbols("DTB4WK", src = "FRED", from = start_date, to = end_date, 
                       auto.assign = FALSE)
 
-# Convert Adjusted Closing Prices and DTB4WK to data frames
+#Convert Adjusted Closing Prices and DTB4WK to data frames
 amd_df <- data.frame(Date = index(amd_data), AMD = as.numeric(Cl(amd_data)))
 gspc_df <- data.frame(Date = index(gspc_data), GSPC = as.numeric(Cl(gspc_data)))
 rf_df <- data.frame(Date = index(rf_data), RF = as.numeric(rf_data[,1]))  
-# above is accessing the first column of rf_data
+#above is accessing the first column of rf_data
 
 # Merge the AMD, GSPC, and RF data frames on the Date column
 df <- merge(amd_df, gspc_df, by = "Date")
