@@ -10,14 +10,7 @@ _"Tell me and I forget. Teach me and I remember. Involve me and I learn" - Benja
 ---
 ![Quest Guide](quest.jpg)
 
-### Congrats on completing the ACTL1101!
 
->Now it's time to build your own website to showcase your work.  
->To create a website on GitHub Pages to showcase your work is very easy.
-
-This is written in markdown language. 
->
-* Click [link](https://classroom.github.com/a/urlUeIOS) to accept your assignment.
 
 
 * [Probability](probability.md)
